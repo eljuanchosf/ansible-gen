@@ -27,13 +27,22 @@ func Test_ProjectHasAName(t *testing.T) {
 	}
 }
 
-func Test_ProjectHasRoles(t *testing.T) {
+func Test_ProjectHasAnArrayOfRoles(t *testing.T) {
 	project := testProject()
 	want := 2
 	if got := len(project.customRoles); got != want {
 		t.Errorf("Project has custom roles, wanted %d, got %d", want, got)
 	}
-	want = 3
+	projectCustomRoleType := reflect.TypeOf(project.customRoles)
+	roleType := reflect.TypeOf([]AnsibleRole{})
+	if projectCustomRoleType != roleType {
+		t.Errorf("Project has %d custom roles of type %s, expected of type %s", want, roleType, projectCustomRoleType)
+	}
+}
+
+func Test_ProjectHasGalaxyRoles(t *testing.T) {
+	project := testProject()
+	want := 3
 	if got := len(project.galaxyRoles); got != want {
 		t.Errorf("Project has Galaxy roles, wanted %d, got %d", want, got)
 	}
@@ -56,6 +65,27 @@ func Test_SplitRoles(t *testing.T) {
 	for _, tt := range tests {
 		if got := len(splitRoles(tt.args.roles)); got != tt.want {
 			t.Errorf("%q. splitRoles() = %d, want %d", tt.name, got, tt.want)
+		}
+	}
+}
+
+func Test_SplitCustomRoles(t *testing.T) {
+	type args struct {
+		roles string
+	}
+	tests := []struct {
+		name string
+		args args
+		want int
+	}{
+		{"Split two roles", args{"role1,role2"}, 2},
+		{"Only one role", args{"role"}, 1},
+		{"No role", args{""}, 0},
+		{"Three roles", args{"role1, role2, role3"}, 3},
+	}
+	for _, tt := range tests {
+		if got := len(splitCustomRoles(tt.args.roles)); got != tt.want {
+			t.Errorf("%q. splitCustomRoles() = %d, want %d", tt.name, got, tt.want)
 		}
 	}
 }

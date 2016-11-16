@@ -5,7 +5,7 @@ import "strings"
 //AnsibleProject represents the structure of an Ansible Project
 type AnsibleProject struct {
 	name        string
-	customRoles []string
+	customRoles []AnsibleRole
 	galaxyRoles []string
 }
 
@@ -13,9 +13,17 @@ type AnsibleProject struct {
 func NewAnsibleProject(name string, customRoles string, galaxyRoles string) *AnsibleProject {
 	return &AnsibleProject{
 		name:        name,
-		customRoles: splitRoles(customRoles),
+		customRoles: splitCustomRoles(customRoles),
 		galaxyRoles: splitRoles(galaxyRoles),
 	}
+}
+
+func splitCustomRoles(customRoles string) []AnsibleRole {
+	roles := []AnsibleRole{}
+	for _, roleName := range splitRoles(customRoles) {
+		roles = append(roles, *NewAnsibleRole(roleName))
+	}
+	return roles
 }
 
 func splitRoles(roles string) []string {
