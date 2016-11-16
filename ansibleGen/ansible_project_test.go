@@ -1,9 +1,22 @@
 package ansibleGen
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func testProject() AnsibleProject {
 	return *NewAnsibleProject("my_test_name", "crole1,crole2", "grole1,grole2,grole3")
+}
+
+func Test_NewAnsibleProject(t *testing.T) {
+
+	ap := testProject()
+	apType := reflect.TypeOf(ap).Kind()
+	if apType != reflect.Struct {
+		t.Errorf("NewAnsibleProject didn't return an struct")
+	}
+
 }
 
 func Test_ProjectHasAName(t *testing.T) {
