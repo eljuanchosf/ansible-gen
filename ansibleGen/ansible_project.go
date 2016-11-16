@@ -11,12 +11,10 @@ type AnsibleProject struct {
 
 //NewAnsibleProject initializes the structure for a new Ansible project
 func NewAnsibleProject(name string, customRoles string, galaxyRoles string) *AnsibleProject {
-	projectCustomRoles := splitRoles(customRoles)
-	projectGalaxyRoles := splitRoles(galaxyRoles)
 	return &AnsibleProject{
 		name:        name,
-		customRoles: projectCustomRoles,
-		galaxyRoles: projectGalaxyRoles,
+		customRoles: splitRoles(customRoles),
+		galaxyRoles: splitRoles(galaxyRoles),
 	}
 }
 

@@ -2,41 +2,27 @@ package ansibleGen
 
 import "testing"
 
-func Test_ProjectHasTheRightName(t *testing.T) {
-	type args struct {
-		name        string
-		customRoles string
-		galaxyRoles string
-	}
-	test := struct {
-		name string
-		args args
-		want string
-	}{
-		"Project name is test_project", args{"test_project", "role1,role2", "grole1,grole2"}, "test_project",
-	}
-	ap := *NewAnsibleProject(test.args.name, test.args.customRoles, test.args.galaxyRoles)
-	if ap.name != test.want {
-		t.Errorf("%q, wanted %s, got %s", test.name, ap.name, test.want)
+func testProject() AnsibleProject {
+	return *NewAnsibleProject("my_test_name", "crole1,crole2", "grole1,grole2,grole3")
+}
+
+func Test_ProjectHasAName(t *testing.T) {
+	project := testProject()
+	want := "my_test_name"
+	if project.name != want {
+		t.Errorf("Project has a name, wanted %s, got %s", project.name, want)
 	}
 }
 
-func Test_ProjectHasTheCustomRoles(t *testing.T) {
-	type args struct {
-		name        string
-		customRoles string
-		galaxyRoles string
+func Test_ProjectHasRoles(t *testing.T) {
+	project := testProject()
+	want := 2
+	if got := len(project.customRoles); got != want {
+		t.Errorf("Project has custom roles, wanted %d, got %d", want, got)
 	}
-	test := struct {
-		name string
-		args args
-		want int
-	}{
-		"Project has two custom roles", args{"test_project", "role1,role2", "grole1,grole2"}, 2,
-	}
-	ap := *NewAnsibleProject(test.args.name, test.args.customRoles, test.args.galaxyRoles)
-	if len(ap.customRoles) != test.want {
-		t.Errorf("%q, wanted %d, got %d", test.name, len(ap.customRoles), test.want)
+	want = 3
+	if got := len(project.galaxyRoles); got != want {
+		t.Errorf("Project has Galaxy roles, wanted %d, got %d", want, got)
 	}
 }
 
