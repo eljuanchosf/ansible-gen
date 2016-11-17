@@ -17,12 +17,31 @@ type AnsibleProject struct {
 
 //NewAnsibleProject initializes the structure for a new Ansible project
 func NewAnsibleProject(name string, customRoles string, galaxyRoles string) *AnsibleProject {
-	return &AnsibleProject{
+	ap := &AnsibleProject{
 		Name:          name,
 		CustomRoles:   splitCustomRoles(customRoles),
 		GalaxyRoles:   splitRoles(galaxyRoles),
 		TreeStructure: getProjectTreeTemplate(name),
 	}
+	ap.addRolesToTreeStructure()
+	return ap
+}
+
+func (project *AnsibleProject) addRolesToTreeStructure() {
+	rolesIndex := project.rolesFolderIndex("roles")
+	rolesFolder := &project.TreeStructure.Folders[rolesIndex]
+	for _, role := range project.CustomRoles {
+		rolesFolder.Folders = append(rolesFolder.Folders, role.TreeStructure)
+	}
+}
+
+func (project *AnsibleProject) rolesFolderIndex(rolesFolderName string) int {
+	for index, folder := range project.TreeStructure.Folders {
+		if folder.Name == rolesFolderName {
+			return index
+		}
+	}
+	return 0
 }
 
 func splitCustomRoles(customRoles string) []AnsibleRole {

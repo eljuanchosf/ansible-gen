@@ -111,9 +111,17 @@ func Test_getProjectTreeTemplate(t *testing.T) {
 	}
 }
 
-func Test_ProjectHasATree(t *testing.T) {
+func Test_ProjectHasATreeStructure(t *testing.T) {
 	p := testProject()
 	if len(p.TreeStructure.Folders) == 0 {
 		t.Error("Tree structure for the project is empty")
+	}
+}
+
+func Test_ProjectAddsRoles(t *testing.T) {
+	p := testProject()
+	rolesIndex := p.rolesFolderIndex("roles")
+	if len(p.TreeStructure.Folders[rolesIndex].Folders) != 2 {
+		t.Error("Project does not have the roles in the tree structure")
 	}
 }
