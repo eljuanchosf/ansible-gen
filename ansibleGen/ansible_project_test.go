@@ -121,7 +121,7 @@ func Test_ProjectHasATreeStructure(t *testing.T) {
 func Test_ProjectAddsRoles(t *testing.T) {
 	p := testProject()
 	rolesIndex := p.rolesFolderIndex("roles")
-	if len(p.TreeStructure.Folders[rolesIndex].Folders) != 2 {
+	if len(p.TreeStructure.Folders[rolesIndex].Folders) != len(splitRoles(testProjectArgs.CustomRoles)) {
 		t.Error("Project does not have the roles in the tree structure")
 	}
 }
