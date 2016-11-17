@@ -5,8 +5,11 @@ import (
 	"testing"
 )
 
+var roleName string
+
 func testRole() AnsibleRole {
-	return *NewAnsibleRole("my_role_name")
+	roleName = "my_role_name"
+	return *NewAnsibleRole(roleName)
 }
 
 func Test_NewAnsibleRole(t *testing.T) {
@@ -19,8 +22,14 @@ func Test_NewAnsibleRole(t *testing.T) {
 
 func Test_AnsibleRoleHasName(t *testing.T) {
 	role := testRole()
-	want := "my_role_name"
-	if got := role.name; got != want {
-		t.Errorf("Role doesn't have expected name, wanted %s, got %s", want, got)
+	if got := role.name; got != roleName {
+		t.Errorf("Role doesn't have expected name, wanted %s, got %s", roleName, got)
+	}
+}
+
+func Test_getRoleTreeTemplate(t *testing.T) {
+	role := getRoleTreeTemplate(roleName)
+	if role.Name != roleName {
+		t.Errorf("The tree structure does not have the role name")
 	}
 }
