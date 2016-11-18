@@ -49,13 +49,13 @@ func main() {
 				cli.StringFlag{
 					Name:        "c",
 					Value:       "",
-					Usage:       "Specify the custom roles for the project",
+					Usage:       "A comma separated list of the custom roles for the project",
 					Destination: &customRoles,
 				},
 				cli.StringFlag{
 					Name:        "g",
 					Value:       "",
-					Usage:       "Specify the Ansible Galaxy roles for the project",
+					Usage:       "A comma separated list of the Ansible Galaxy roles for the project",
 					Destination: &galaxyRoles,
 				},
 				cli.BoolFlag{
