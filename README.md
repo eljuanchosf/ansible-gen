@@ -4,6 +4,12 @@ A simple tool to scaffold Ansible projects according to the best practices descr
 
 ## Installation
 
+### Download release
+
+You can download the latest release from [here](https://github.com/eljuanchosf/ansible-gen/releases).
+
+### From source
+
 If you want to compile from source, you have to have Golang installed. I used version 1.7.3 for development. Didn't try any other version.
 
 I highly recomment [gvm](https://github.com/moovweb/gvm) to manage your Go versions. 
