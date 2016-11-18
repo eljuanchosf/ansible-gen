@@ -2,6 +2,18 @@
 
 A simple tool to scaffold Ansible projects according to the best practices described in the [Ansible documentation](http://docs.ansible.com/ansible/playbooks_best_practices.html).
 
+## Installation
+
+If you want to compile from source, you have to have Golang installed. I used version 1.7.3 for development. Didn't try any other version.
+
+To build it, use the included `run.sh` script:
+
+```
+./run.sh build
+```
+
+**TODO**: Soon, compiled versions to download.  
+
 ## Usage
 
 ### Global commands and options
@@ -69,3 +81,11 @@ $ ansible-gen r my-role
 ## Rationale
 
 The idea was to experiment with some Golang features while developing something useful.
+
+## Contributing
+
+1. Fork it
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Added some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
