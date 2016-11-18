@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/eljuanchosf/ansible-gen)](https://goreportcard.com/report/github.com/eljuanchosf/ansible-gen)
+[![codebeat badge](https://codebeat.co/badges/ffe93ea7-4a4d-47ba-9e63-d248b491b1b1)](https://codebeat.co/projects/github-com-eljuanchosf-ansible-gen)
 # ansible-gen
 
 A simple tool to scaffold Ansible projects according to the best practices described in the [Ansible documentation](http://docs.ansible.com/ansible/playbooks_best_practices.html).
