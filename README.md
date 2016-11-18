@@ -81,6 +81,8 @@ $ ansible-gen r my-role
 ## Rationale
 
 The idea was to experiment with some Golang features while developing something useful.
+The code can be better, I know, but this is learning project. Any suggestion is welcome!
+
 
 ## Contributing
 
