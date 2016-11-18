@@ -33,15 +33,15 @@ func WriteTreeToDisk(rootDir string, treeStructure Folder, baseFs *afero.Fs, dry
 
 func createDirectory(rootDir string, folder Folder, baseFs *afero.Fs, dryRun bool) (string, afero.Fs) {
 	fs := *baseFs
-	bp := afero.NewBasePathFs(fs, rootDir)
+	basePath := afero.NewBasePathFs(fs, rootDir)
 	newRoot := filepath.Join(rootDir, folder.Name)
 	if dryRun {
 		fmt.Printf("D: %s\n", newRoot)
 	} else {
-		bp.Mkdir(folder.Name, 0755)
+		basePath.Mkdir(folder.Name, 0755)
 	}
-	bp = afero.NewBasePathFs(fs, newRoot)
-	return newRoot, bp
+	basePath = afero.NewBasePathFs(fs, newRoot)
+	return newRoot, basePath
 }
 
 func createFile(rootDir string, file File, baseFs *afero.Fs, dryRun bool) {
