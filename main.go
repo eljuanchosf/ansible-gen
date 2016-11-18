@@ -29,7 +29,7 @@ func main() {
 
 	var customRoles string
 	var galaxyRoles string
-	var projectGit bool
+	var skipGit bool
 	var dryRun bool
 
 	app.Flags = []cli.Flag{
@@ -61,7 +61,7 @@ func main() {
 				cli.BoolFlag{
 					Name:        "skip-git",
 					Usage:       "Do not initialize a Git repository for the project",
-					Destination: &projectGit,
+					Destination: &skipGit,
 				},
 			},
 			Action: func(c *cli.Context) error {
@@ -73,6 +73,9 @@ func main() {
 				}
 				ansibleProject := *ansibleGen.NewAnsibleProject(projectName, customRoles, galaxyRoles)
 				ansibleProject.Save(dryRun)
+				if !skipGit {
+					ansibleProject.InitGit(dryRun)
+				}
 				return nil
 			},
 		},

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
+	"path/filepath"
 	"strings"
 
 	"github.com/spf13/afero"
@@ -17,6 +19,7 @@ type AnsibleProject struct {
 	CustomRoles   []AnsibleRole
 	GalaxyRoles   []string
 	TreeStructure Folder
+	RootDir       string
 }
 
 //NewAnsibleProject initializes the structure for a new Ansible project
@@ -27,6 +30,7 @@ func NewAnsibleProject(name string, customRoles string, galaxyRoles string) *Ans
 		GalaxyRoles:   splitRoles(galaxyRoles),
 		TreeStructure: getProjectTreeTemplate(name),
 	}
+	ap.RootDir, _ = os.Getwd()
 	ap.addRolesToTreeStructure()
 	ap.addGalaxyRoles()
 	return ap
@@ -35,10 +39,22 @@ func NewAnsibleProject(name string, customRoles string, galaxyRoles string) *Ans
 //Save run the tree structure creation for the project
 func (project *AnsibleProject) Save(dryRun bool) {
 	baseFs := afero.NewOsFs()
-	rootDir, _ := os.Getwd()
-	fmt.Println("Using root directory: ", rootDir)
-	WriteTreeToDisk(rootDir, project.TreeStructure, &baseFs, dryRun, rootDir)
+	fmt.Println("Using root directory: ", project.RootDir)
+	WriteTreeToDisk(project.RootDir, project.TreeStructure, &baseFs, dryRun, project.RootDir)
 	fmt.Printf("Ansible project %s has been generated\n", project.Name)
+}
+
+//InitGit initializes a Git repository
+func (project *AnsibleProject) InitGit(dryRun bool) {
+	if !dryRun {
+		cmd := "git"
+		args := []string{"init", filepath.Join(project.RootDir, project.Name)}
+		if err := exec.Command(cmd, args...).Run(); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+	}
+	fmt.Println("Successfully initialized a Git repository for the project")
 }
 
 func (project *AnsibleProject) addGalaxyRoles() {
