@@ -1,14 +1,16 @@
 #!/usr/bin/env bash
 
 version=$(cat VERSION)
-args=""
+compileArgs=""
+runArgs=""
 
 if [ "$1" == 'build' ]; then
     command='build'
-    args="-o ansible-gen"
+    compileArgs="-o ansible-gen"
     echo "Compiling version $version"
 else
     command='run'
+    runArgs="${@:1}"
 fi 
 
-go $command $args -ldflags "-X main.cliVersion=$version" main.go
+go $command $compileArgs -ldflags "-X main.cliVersion=$version" main.go $runArgs

@@ -1,8 +1,12 @@
 package ansibleGen
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"strings"
+
+	"github.com/spf13/afero"
 
 	yaml "gopkg.in/yaml.v2"
 )
@@ -24,7 +28,29 @@ func NewAnsibleProject(name string, customRoles string, galaxyRoles string) *Ans
 		TreeStructure: getProjectTreeTemplate(name),
 	}
 	ap.addRolesToTreeStructure()
+	ap.addGalaxyRoles()
 	return ap
+}
+
+//Save run the tree structure creation for the project
+func (project *AnsibleProject) Save(dryRun bool) {
+	baseFs := afero.NewOsFs()
+	rootDir, _ := os.Getwd()
+	fmt.Println("Using root directory: ", rootDir)
+	WriteTreeToDisk(rootDir, project.TreeStructure, &baseFs, dryRun, rootDir)
+	fmt.Printf("Ansible project %s has been generated\n", project.Name)
+}
+
+func (project *AnsibleProject) addGalaxyRoles() {
+	if len(project.GalaxyRoles) > 0 {
+		var galaxyRolesFile = File{Name: "galaxy-roles.yml"}
+		fileContent := "---\n"
+		for _, role := range project.GalaxyRoles {
+			fileContent += fmt.Sprintln("-", role)
+		}
+		galaxyRolesFile.Content = fileContent
+		project.TreeStructure.Files = append(project.TreeStructure.Files, galaxyRolesFile)
+	}
 }
 
 func (project *AnsibleProject) addRolesToTreeStructure() {

@@ -3,6 +3,7 @@ package ansibleGen
 import (
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	"github.com/spf13/afero"
 )
@@ -21,22 +22,22 @@ type Folder struct {
 }
 
 //WriteTreeToDisk creates a directory structure based on the treeStructure parameter
-func WriteTreeToDisk(rootDir string, treeStructure Folder, baseFs *afero.Fs, dryRun bool) {
-	newRoot, basePath := createDirectory(rootDir, treeStructure, baseFs, dryRun)
+func WriteTreeToDisk(rootDir string, treeStructure Folder, baseFs *afero.Fs, dryRun bool, baseDir string) {
+	newRoot, basePath := createDirectory(rootDir, treeStructure, baseFs, dryRun, baseDir)
 	for _, file := range treeStructure.Files {
-		createFile(newRoot, file, &basePath, dryRun)
+		createFile(newRoot, file, &basePath, dryRun, baseDir)
 	}
 	for _, folder := range treeStructure.Folders {
-		WriteTreeToDisk(newRoot, folder, baseFs, dryRun)
+		WriteTreeToDisk(newRoot, folder, baseFs, dryRun, baseDir)
 	}
 }
 
-func createDirectory(rootDir string, folder Folder, baseFs *afero.Fs, dryRun bool) (string, afero.Fs) {
+func createDirectory(rootDir string, folder Folder, baseFs *afero.Fs, dryRun bool, baseDir string) (string, afero.Fs) {
 	fs := *baseFs
 	basePath := afero.NewBasePathFs(fs, rootDir)
 	newRoot := filepath.Join(rootDir, folder.Name)
 	if dryRun {
-		fmt.Printf("D: %s\n", newRoot)
+		fmt.Printf("Create directory %s\n", strings.Replace(newRoot, baseDir, ".", 1))
 	} else {
 		basePath.Mkdir(folder.Name, 0755)
 	}
@@ -44,11 +45,20 @@ func createDirectory(rootDir string, folder Folder, baseFs *afero.Fs, dryRun boo
 	return newRoot, basePath
 }
 
-func createFile(rootDir string, file File, baseFs *afero.Fs, dryRun bool) {
+func createFile(rootDir string, file File, baseFs *afero.Fs, dryRun bool, baseDir string) {
 	fs := *baseFs
 	if dryRun {
-		fmt.Printf("F: %s\n", filepath.Join(rootDir, file.Name))
+		fmt.Printf("Create file      %s\n", strings.Replace(filepath.Join(rootDir, file.Name), baseDir, ".", 1))
 	} else {
-		fs.Create(file.Name)
+
+		if file.Content == "" {
+			switch filepath.Ext(file.Name) {
+			case ".yml":
+				file.Content = yamlTemplate()
+			case "":
+				file.Content = variablesTemplate()
+			}
+		}
+		afero.WriteFile(fs, file.Name, []byte(file.Content), 0644)
 	}
 }

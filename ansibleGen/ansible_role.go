@@ -1,23 +1,36 @@
 package ansibleGen
 
 import (
+	"fmt"
 	"log"
+	"os"
+
+	"github.com/spf13/afero"
 
 	yaml "gopkg.in/yaml.v2"
 )
 
 //AnsibleRole represents the structure of an Ansible Role
 type AnsibleRole struct {
-	name          string
+	Name          string
 	TreeStructure Folder
 }
 
 //NewAnsibleRole initializes the structure for a new Ansible role
 func NewAnsibleRole(name string) *AnsibleRole {
 	return &AnsibleRole{
-		name:          name,
+		Name:          name,
 		TreeStructure: getRoleTreeTemplate(name),
 	}
+}
+
+//Save run the tree structure creation for the project
+func (role *AnsibleRole) Save(dryRun bool) {
+	baseFs := afero.NewOsFs()
+	rootDir, _ := os.Getwd()
+	fmt.Println("Using root directory: ", rootDir)
+	WriteTreeToDisk(rootDir, role.TreeStructure, &baseFs, dryRun, rootDir)
+	fmt.Printf("Ansible role %s has been generated\n", role.Name)
 }
 
 func getRoleTreeTemplate(roleName string) Folder {

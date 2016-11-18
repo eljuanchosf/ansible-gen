@@ -5,6 +5,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/eljuanchosf/ansible-gen/ansibleGen"
 	"github.com/urfave/cli"
 )
 
@@ -29,6 +30,15 @@ func main() {
 	var customRoles string
 	var galaxyRoles string
 	var projectGit bool
+	var dryRun bool
+
+	app.Flags = []cli.Flag{
+		cli.BoolFlag{
+			Name:        "dry-run, d",
+			Usage:       "just print results, do not modify the filesystem",
+			Destination: &dryRun,
+		},
+	}
 
 	app.Commands = []cli.Command{
 		{
@@ -55,12 +65,14 @@ func main() {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				if c.Args().First() == "" {
+				projectName := c.Args().First()
+				if projectName == "" {
 					fmt.Println("Please provide a project name")
 					cli.ShowSubcommandHelp(c)
 					return nil
 				}
-				fmt.Printf("Create the project %s with custom roles %s and galaxy roles %s and %v git", c.Args().First(), customRoles, galaxyRoles, projectGit)
+				ansibleProject := *ansibleGen.NewAnsibleProject(projectName, customRoles, galaxyRoles)
+				ansibleProject.Save(dryRun)
 				return nil
 			},
 		},
@@ -69,12 +81,14 @@ func main() {
 			Aliases: []string{"r"},
 			Usage:   "Creates a new Ansible role",
 			Action: func(c *cli.Context) error {
+				roleName := c.Args().First()
 				if c.Args().First() == "" {
 					fmt.Println("Please provide a role name")
 					cli.ShowSubcommandHelp(c)
 					return nil
 				}
-				fmt.Println("Create the role: ", c.Args().First())
+				ansibleRole := *ansibleGen.NewAnsibleRole(roleName)
+				ansibleRole.Save(dryRun)
 				return nil
 			},
 		},
