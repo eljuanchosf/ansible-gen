@@ -14,7 +14,7 @@ func main() {
 
 	app := cli.NewApp()
 	app.Name = "ansible-gen"
-	app.Version = "0.0.1"
+	app.Version = cliVersion
 	app.Compiled = time.Now()
 	app.Authors = []cli.Author{
 		cli.Author{
