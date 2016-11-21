@@ -9,7 +9,7 @@ import (
 func Test_WriteTreeToDiskOnProject(t *testing.T) {
 	p := testProject()
 	baseFs := afero.NewMemMapFs()
-	WriteTreeToDisk("/tmp", p.TreeStructure, &baseFs, false)
+	WriteTreeToDisk("/tmp", p.TreeStructure, &baseFs, false, "/tmp")
 	if _, err := baseFs.Stat("/tmp/my_test_name/roles/crole1"); err != nil {
 		t.Errorf("Expected 'roles/crole1' to be present in filesystem structure")
 	}
@@ -21,7 +21,7 @@ func Test_WriteTreeToDiskOnProject(t *testing.T) {
 func Test_WriteTreeToDiskOnRoles(t *testing.T) {
 	r := testRole()
 	baseFs := afero.NewMemMapFs()
-	WriteTreeToDisk("/tmp", r.TreeStructure, &baseFs, false)
+	WriteTreeToDisk("/tmp", r.TreeStructure, &baseFs, false, "/tmp")
 	if _, err := baseFs.Stat("/tmp/my_role_name"); err != nil {
 		t.Errorf("Expected 'my_role_name' to be present in filesystem structure")
 	}
@@ -33,7 +33,7 @@ func Test_WriteTreeToDiskOnRoles(t *testing.T) {
 func Test_WriteTreeToDiskOnDryRun(t *testing.T) {
 	r := testRole()
 	baseFs := afero.NewMemMapFs()
-	WriteTreeToDisk("/tmp", r.TreeStructure, &baseFs, true)
+	WriteTreeToDisk("/tmp", r.TreeStructure, &baseFs, true, "/tmp")
 	if _, err := baseFs.Stat("/tmp/my_role_name"); err == nil {
 		t.Errorf("Expected 'my_role_name' should not be present in the file structure while in Dry Run")
 	}
