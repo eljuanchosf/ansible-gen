@@ -20,7 +20,7 @@ If you want to compile from source, you have to have Golang installed. I used ve
 
 I highly recomment [gvm](https://github.com/moovweb/gvm) to manage your Go versions. 
 
-1. Install [Godep](https://github.com/tools/godep) - Usually with `go get https://github.com/tools/godep`
+1. Install [Godep](https://github.com/tools/godep) - Usually with `go get github.com/tools/godep`
 2. Run `$ godep restore` to install dependencies to your `GOPATH`
 3. Build `ansible-gen` using the included `run.sh` script: 
 ```
