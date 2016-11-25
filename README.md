@@ -4,6 +4,10 @@
 
 A simple tool to scaffold Ansible projects according to the best practices described in the [Ansible documentation](http://docs.ansible.com/ansible/playbooks_best_practices.html).
 
+## Important!
+
+If you use it, wherther you like it or not, please drop me a line in Twitter (@eljuanchosf) so I know that this thing is being useful. :)
+
 ## Installation
 
 ### Download release
