@@ -63,6 +63,12 @@ func main() {
 					Usage:       "Do not initialize a Git repository for the project",
 					Destination: &skipGit,
 				},
+				cli.StringFlag{
+					Name:        "t",
+					Value:       "",
+					Usage:       "A template name (get the list of templates with the 'template' command)",
+					Destination: &galaxyRoles,
+				},
 			},
 			Action: func(c *cli.Context) error {
 				projectName := c.Args().First()
@@ -93,6 +99,37 @@ func main() {
 				ansibleRole := *ansibleGen.NewAnsibleRole(roleName)
 				ansibleRole.Save(dryRun)
 				return nil
+			},
+		},
+		{
+			Name:    "template",
+			Aliases: []string{"t"},
+			Usage:   "Manage templates",
+			Subcommands: []cli.Command{
+				{
+					Name:  "list",
+					Usage: "list the available project templates",
+					Action: func(c *cli.Context) error {
+						fmt.Println("Listing templates")
+						return nil
+					},
+					Flags: []cli.Flag{
+						cli.StringFlag{
+							Name:        "update-cache",
+							Value:       "",
+							Usage:       "Force the project templates cache update",
+							Destination: &customRoles,
+						},
+					},
+				},
+				{
+					Name:  "create",
+					Usage: "create a new project template",
+					Action: func(c *cli.Context) error {
+						fmt.Println("Created a new template")
+						return nil
+					},
+				},
 			},
 		},
 	}
