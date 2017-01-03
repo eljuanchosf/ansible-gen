@@ -109,6 +109,9 @@ files:
 - name: production
 - name: staging
 - name: main.yml
+- dev.ini
+- staging.ini
+- production.ini
 folders:
 - name: group_vars
   files:

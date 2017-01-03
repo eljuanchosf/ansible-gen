@@ -55,6 +55,8 @@ func createFile(rootDir string, file File, baseFs *afero.Fs, dryRun bool, baseDi
 			switch filepath.Ext(file.Name) {
 			case ".yml":
 				file.Content = yamlTemplate()
+			case ".ini":
+				file.Content = inventoryTemplate()
 			case "":
 				file.Content = variablesTemplate()
 			}
