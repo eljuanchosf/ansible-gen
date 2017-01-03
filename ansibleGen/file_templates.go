@@ -7,7 +7,7 @@ func yamlTemplate() string {
 }
 
 func variablesTemplate() string {
-	return `# Add your varialbes here
+	return `# Add your variables here
 `
 }
 

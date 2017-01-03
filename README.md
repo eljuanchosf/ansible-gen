@@ -4,6 +4,10 @@
 
 A simple tool to scaffold Ansible projects according to the best practices described in the [Ansible documentation](http://docs.ansible.com/ansible/playbooks_best_practices.html).
 
+## Important!
+
+If you use it, wherther you like it or not, please drop me a line in Twitter (@eljuanchosf) so I know that this thing is being useful. :)
+
 ## Installation
 
 ### Download release
@@ -16,7 +20,7 @@ If you want to compile from source, you have to have Golang installed. I used ve
 
 I highly recomment [gvm](https://github.com/moovweb/gvm) to manage your Go versions. 
 
-1. Install [Godep](https://github.com/tools/godep) - Usually with `go get https://github.com/tools/godep`
+1. Install [Godep](https://github.com/tools/godep) - Usually with `go get github.com/tools/godep`
 2. Run `$ godep restore` to install dependencies to your `GOPATH`
 3. Build `ansible-gen` using the included `run.sh` script: 
 ```
@@ -92,7 +96,7 @@ $ ansible-gen r my-role
 ## Rationale
 
 The idea was to experiment with some Golang features while developing something useful.
-The code can be better, I know, but this is learning project. Any suggestion is welcome!
+The code can be better, I know, but this is learning project. All suggestion are welcome!
 
 
 ## Contributing
